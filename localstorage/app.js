@@ -1,23 +1,31 @@
-const form = document.querySelector('form');
+const form = document.querySelector("form");
 
-form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const formData = {
-        key: form.key.value,
-        value: form.value.value,
-    };
-    console.log({ formData });
-    window.localStorage.setItem('key', form.key.value);
-    window.localStorage.setItem('value', form.value.value);
-    readFromStorage();
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const form = event.target;
+  const formData = {
+    key: form.key.value,
+    value: form.value.value,
+  };
+  console.log({ formData });
+  window.localStorage.setItem(form.key.value, form.value.value);
+  form.reset();
+  form.key.focus();
+  readFromStorage();
 });
 
 function readFromStorage() {
-    const key = window.localStorage.getItem('key');
-    const value = window.localStorage.getItem('value');
-    document.querySelector('output')
-        .textContent = JSON.stringify({ key, value }, null, 2);
+  document.querySelector("output").innerHTML += Object.keys(window.localStorage)
+    .map(htmlTemplate)
+    .join("");
+}
+
+function htmlTemplate(key) {
+  const value = window.localStorage.getItem(key);
+  return `
+    <span>${key}</span>
+    <span>${value}</span>
+  `;
 }
 
 readFromStorage();
